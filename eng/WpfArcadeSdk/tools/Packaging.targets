@@ -128,7 +128,18 @@ $(PreparePackageAssetsDependsOn):
     
     <CreateItem Include="$(ReferenceAssemblyDir)*.dll"
                 AdditionalMetadata="RelativePath=$(ArtifactsPackagingDir)$(NormalizedPackageName)\ref\$(TargetFramework)"
-                Condition="'$(DestinationSubFolder)'!='' and '$(IsPackagingProject)'!='true' and '$(ExcludeRefAssemblies)'!='true'">
+                Condition="'$(DestinationSubFolder)'!='' and '$(IsPackagingProject)'!='true' and '$(ExcludeRefAssemblies)'!='true' and 
+                           '$(TargetFramework)' != ''">
+      <Output ItemName="PackageAsset" TaskParameter="Include"/>
+    </CreateItem>
+
+    <!-- 
+      When TFM is not know, try RuntimeIdentifier - it might be a native resource, for e.g., wpfgfx_cor3
+    -->
+    <CreateItem Include="$(ReferenceAssemblyDir)*.dll"
+                AdditionalMetadata="RelativePath=$(ArtifactsPackagingDir)$(NormalizedPackageName)\ref\$(WpfRuntimeIdentifier)"
+                Condition="'$(DestinationSubFolder)'!='' and '$(IsPackagingProject)'!='true' and '$(ExcludeRefAssemblies)'!='true' and 
+                           '$(TargetFramework)' == '' and '$(WpfRuntimeIdentifier)' != ''">
       <Output ItemName="PackageAsset" TaskParameter="Include"/>
     </CreateItem>
     
@@ -314,6 +325,13 @@ $(PreparePackageAssetsDependsOn):
       </Content>
 
       <Content Include="$(ArtifactsPackagingDir)$(NormalizedPackageName)\ref\**\*.xml"
+         Condition="Exists('$(ArtifactsPackagingDir)$(NormalizedPackageName)\ref\')">
+        <Pack>true</Pack>
+        <PackagePath>ref</PackagePath>
+      </Content>
+
+      <!-- We include ETW manifests in the ref-pack as part of native resources -->
+      <Content Include="$(ArtifactsPackagingDir)$(NormalizedPackageName)\ref\**\*.man"
          Condition="Exists('$(ArtifactsPackagingDir)$(NormalizedPackageName)\ref\')">
         <Pack>true</Pack>
         <PackagePath>ref</PackagePath>

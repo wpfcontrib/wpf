@@ -95,8 +95,13 @@
       WindowsFormsIntegration-ref;
     </ExternalHandCraftedReferenceProjects>
 
+    <InternalHandCraftedReferenceProjects>
+      wpfgfx-ref;
+    </InternalHandCraftedReferenceProjects>
+
     <HandCraftedReferenceProjects>
       $(ExternalHandCraftedReferenceProjects);
+      $(InternalHandCraftedReferenceProjects);
     </HandCraftedReferenceProjects>
 
     <HelperProjects>
@@ -143,6 +148,7 @@
       WindowsBase-ref;
       WindowsFormsIntegration;
       WindowsFormsIntegration-ref;
+      wpfgfx-ref;
       PresentationFramework-PresentationUI-api-cycle;
       PresentationFramework-ReachFramework-impl-cycle;
       PresentationFramework-System.Printing-api-cycle;

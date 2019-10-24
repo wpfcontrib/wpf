@@ -36,7 +36,11 @@
       <Output PropertyName="BaseReferenceAssemblyDir" TaskParameter="Value"/>
     </CreateProperty>
 
-    <CreateProperty Condition="'$(ReferenceAssemblyDir)'==''" Value="$(BaseReferenceAssemblyDir)$(Configuration)\$(TargetFramework)\">
+    <CreateProperty Condition="'$(ReferenceAssemblyDir)'=='' and '$(TargetFramework)' != ''" Value="$(BaseReferenceAssemblyDir)$(Configuration)\$(TargetFramework)\">
+      <Output PropertyName="ReferenceAssemblyDir" TaskParameter="Value"/>
+    </CreateProperty>
+
+    <CreateProperty Condition="'$(ReferenceAssemblyDir)'=='' and '$(TargetFramework)' == '' and '$(Platform)' != ''" Value="$(BaseReferenceAssemblyDir)$(Configuration)\$(WpfRuntimeIdentifier)\">
       <Output PropertyName="ReferenceAssemblyDir" TaskParameter="Value"/>
     </CreateProperty>
   </Target>
@@ -76,7 +80,8 @@
   -->
   <Target Name="CopyHandCraftedReferenceProjectsToRefDir" 
           AfterTargets="PrepareForRun"
-          Condition="'$(ReferenceProjectRepoLocation)'=='External' and '$(RepositoryName)'=='wpf'">
+          Condition="('$(ReferenceProjectRepoLocation)'=='External' and '$(RepositoryName)'=='wpf') or 
+                     ('$(ReferenceProjectRepoLocation)' == 'Internal' and '$(RepositoryName)' == 'dotnet-wpf-int')">
     <Copy SourceFiles="$(TargetPath)"
           Condition="Exists('$(TargetPath)')"
           DestinationFolder="$(ReferenceAssemblyDir)"

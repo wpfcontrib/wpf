@@ -3,7 +3,7 @@
     <events>
 
       <provider name="Microsoft-Windows-WPF" guid="{E13B77A8-14B6-11DE-8069-001B212B5009}" symbol="MICROSOFT_WINDOWS_WPF_PROVIDER"
-            resourceFileName="%CLR_INSTALL_PATH%\wpf\wpfgfx_v0400.dll" messageFileName="%CLR_INSTALL_PATH%\wpf\wpfgfx_v0400.dll">
+            resourceFileName="wpfgfx_cor3.dll" messageFileName="wpfgfx_cor3.dll">
 
         <channels>
           <channel chid="DefaultChannel" name="Microsoft-Windows-WPF/Default" type="Analytic" symbol="MICROSOFT_WINDOWS_WPF_PROVIDER_DEFAULT_CHANNEL" />

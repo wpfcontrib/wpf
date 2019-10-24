@@ -12,6 +12,7 @@
   <!-- Categorize the repo location based on the hand crafted assembly location. -->
   <PropertyGroup>
     <ReferenceProjectRepoLocation Condition="$(ExternalHandCraftedReferenceProjects.Contains('$(NormalizedMSBuildProjectName);'))">External</ReferenceProjectRepoLocation>
+    <ReferenceProjectRepoLocation Condition="$(InternalHandCraftedReferenceProjects.Contains('$(NormalizedMSBuildProjectName);'))">Internal</ReferenceProjectRepoLocation>
   </PropertyGroup>
 
 </Project>
