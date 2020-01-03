@@ -1012,6 +1012,10 @@
     <Compile Include="System\Windows\Documents\SpellerError.cs" />
     <Compile Include="System\Windows\Documents\SpellerHighlightLayer.cs" />
     <Compile Include="System\Windows\Documents\SpellerInteropBase.cs" />
+    <Compile Include="System\Windows\Documents\SpellerInteropBase.ISpellerSegment.cs" />
+    <Compile Include="System\Windows\Documents\SpellerInteropBase.ISpellerSentence.cs" />
+    <Compile Include="System\Windows\Documents\SpellerInteropBase.ITextRange.cs" />
+    <Compile Include="System\Windows\Documents\SpellerInteropBase.SpellerMode.cs" />
     <Compile Include="System\Windows\Documents\SpellerStatusTable.cs" />
     <Compile Include="System\Windows\Documents\SplayTreeNode.cs" />
     <Compile Include="System\Windows\Documents\SplayTreeNodeRole.cs" />
