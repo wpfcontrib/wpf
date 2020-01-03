@@ -1100,7 +1100,7 @@
     <Compile Include="System\Windows\Documents\ValidationHelper.cs" />
     <Compile Include="System\Windows\Documents\WinEventHandler.cs" />
     <Compile Include="System\Windows\Documents\WinRTSpellerInterop.cs" />
-    <Compile Include="System\Windows\Documents\WinRTSpellerInterop.Extensions.cs" />
+    <Compile Include="System\Windows\Documents\WinRTSpellerInteropExtensions.cs" />
     <Compile Include="System\Windows\Documents\WinRTSpellerInterop.SpellerSegment.cs" />
     <Compile Include="System\Windows\Documents\WinRTSpellerInterop.SpellerSentence.cs" />
     <Compile Include="System\Windows\Documents\WinRTSpellerInterop.TextRange.cs" />
