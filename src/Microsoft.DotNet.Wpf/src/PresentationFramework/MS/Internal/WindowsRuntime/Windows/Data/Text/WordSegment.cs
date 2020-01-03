@@ -110,5 +110,5 @@ namespace MS.Internal.WindowsRuntime
             private static string s_TypeName = "Windows.Data.Text.WordSegment, Windows, ContentType=WindowsRuntime";
             private static Type s_WinRTType = null;
         }
-}
+    }
 }
