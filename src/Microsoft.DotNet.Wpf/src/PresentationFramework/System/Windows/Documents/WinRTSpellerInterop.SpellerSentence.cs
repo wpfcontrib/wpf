@@ -38,14 +38,7 @@ namespace System.Windows.Documents
                 {
                     if (_segments == null)
                     {
-                        List<SpellerSegment> segments = new List<SpellerSegment>();
-
-                        foreach (var wordSegment in _wordBreaker.GetTokens(_sentence))
-                        {
-                            segments.Add(new SpellerSegment(SourceText, wordSegment, _spellChecker, _owner));
-                        }
-
-                        _segments = segments.AsReadOnly();
+                        _segments = _wordBreaker.ComprehensiveGetTokens(_sentence, _spellChecker, _owner);
                     }
 
                     return _segments;

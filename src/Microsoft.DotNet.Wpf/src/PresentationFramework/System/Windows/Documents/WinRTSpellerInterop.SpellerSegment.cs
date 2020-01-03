@@ -14,7 +14,7 @@ namespace System.Windows.Documents
     internal partial class WinRTSpellerInterop
     {
         [DebuggerDisplay("SubSegments.Count = {SubSegments.Count} TextRange = {TextRange.Start},{TextRange.Length}")]
-        private class SpellerSegment: ISpellerSegment
+        internal class SpellerSegment: ISpellerSegment
         {
             #region Constructor
 
@@ -25,6 +25,12 @@ namespace System.Windows.Documents
                 _suggestions = null;
                 _owner = owner;
                 SourceString = sourceString;
+            }
+
+            public SpellerSegment(string sourceString, ITextRange textRange, SpellChecker spellChecker, WinRTSpellerInterop owner): 
+                this(sourceString, (WordSegment)null, spellChecker, owner)
+            {
+                _textRange = new TextRange(textRange);
             }
 
             static SpellerSegment()
@@ -47,12 +53,14 @@ namespace System.Windows.Documents
                     return;
                 }
 
-                List<SpellChecker.SpellingError> spellingErrors = null;
+                //List<SpellChecker.SpellingError> spellingErrors = null;
 
-                using (new SpellerCOMActionTraceLogger(_owner, SpellerCOMActionTraceLogger.Actions.ComprehensiveCheck))
-                {
-                    spellingErrors = _spellChecker.ComprehensiveCheck(_segment.Text);
-                }
+                //using (new SpellerCOMActionTraceLogger(_owner, SpellerCOMActionTraceLogger.Actions.ComprehensiveCheck))
+                //{
+                //    spellingErrors = _spellChecker.ComprehensiveCheck(_segment.Text);
+                //}
+
+                var spellingErrors = _spellChecker.ComprehensiveCheckWithAlternateForms(this);
 
                 if (spellingErrors == null)
                 {
@@ -79,6 +87,10 @@ namespace System.Windows.Documents
             /// <inheritdoc/>
             public string SourceString { get; }
 
+
+            /// <inheritdoc/>
+            public string Text => _segment?.Text ?? SourceString?.Substring(TextRange.Start, TextRange.Length);
+
             /// <summary>
             /// Returns a read-only list of sub-segments of this segment
             /// WinRT word-segmenter doesn't really support sub-segments,
@@ -96,7 +108,12 @@ namespace System.Windows.Documents
             {
                 get
                 {
-                    return new TextRange(_segment.SourceTextSegment);
+                    if (_textRange == null)
+                    {
+                        _textRange = new TextRange(_segment.SourceTextSegment);
+                    }
+
+                    return _textRange;
                 }
             }
 
@@ -109,11 +126,14 @@ namespace System.Windows.Documents
                     {
                         var variants = new HashSet<string>(StringComparer.Ordinal);
 
-                        foreach (var altForm in _segment.AlternateForms)
+                        if (_segment != null)
                         {
-                            if (!string.IsNullOrWhiteSpace(altForm?.AlternateText))
+                            foreach (var altForm in _segment.AlternateForms)
                             {
-                                variants.Add(altForm.AlternateText);
+                                if (!string.IsNullOrWhiteSpace(altForm?.AlternateText))
+                                {
+                                    variants.Add(altForm.AlternateText);
+                                }
                             }
                         }
 
@@ -152,6 +172,8 @@ namespace System.Windows.Documents
                     return _isClean.Value;
                 }
             }
+
+            internal WinRTSpellerInterop Owner => _owner;
 
             public void EnumSubSegments(EnumTextSegmentsCallback segmentCallback, object data)
             {
@@ -241,6 +263,7 @@ namespace System.Windows.Documents
             /// has no other functional use.
             /// </remarks>
             private WinRTSpellerInterop _owner;
+            private ITextRange _textRange;
 
             #endregion Private Fields
         }

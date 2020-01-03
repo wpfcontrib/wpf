@@ -6,12 +6,22 @@ namespace System.Windows.Documents
 {
     internal partial class WinRTSpellerInterop
     {
-        private struct TextRange: SpellerInteropBase.ITextRange
+        internal struct TextRange: SpellerInteropBase.ITextRange
         {
-            public TextRange(MS.Internal.WindowsRuntime.Windows.Data.Text.TextSegment textSegment)
+            public TextRange(MS.Internal.WindowsRuntime.Windows.Data.Text.TextSegment textSegment) 
+                : this((int)textSegment.StartPosition, (int)textSegment.Length)
             {
-                _length = (int)textSegment.Length;
-                _start = (int)textSegment.StartPosition;
+            }
+
+            public TextRange(ITextRange textRange) 
+                : this(textRange.Start, textRange.Length)
+            {
+            }
+
+            public TextRange(int start, int length)
+            {
+                _start = start;
+                _length = length;
             }
 
             public static explicit operator TextRange(MS.Internal.WindowsRuntime.Windows.Data.Text.TextSegment textSegment)
