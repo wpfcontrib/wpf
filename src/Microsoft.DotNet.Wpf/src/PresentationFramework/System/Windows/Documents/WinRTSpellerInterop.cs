@@ -382,11 +382,14 @@ namespace System.Windows.Documents
             int segmentCount = 0;
             bool continueIteration = true;
 
+            // Recreate the string from char[]; ignore trailing '\0' if any
+            string strText = string.Join(string.Empty, text).TrimEnd('\0');
+
             // WinRT WordsSegmenter doesn't have the ability to break down text into segments (sentences).
             // Treat the whole text as a single segment for now.
-            foreach(string strSentence in new string[]{string.Join(string.Empty, text)})
+            foreach(string strSentence in new string[]{strText})
             {
-                SpellerSentence sentence = new SpellerSentence(new string(text), strSentence, wordBreaker, CurrentSpellChecker, this);
+                SpellerSentence sentence = new SpellerSentence(strText, strSentence, wordBreaker, CurrentSpellChecker, this);
                 segmentCount += sentence.Segments.Count;
 
                 if (segmentCallback != null)
