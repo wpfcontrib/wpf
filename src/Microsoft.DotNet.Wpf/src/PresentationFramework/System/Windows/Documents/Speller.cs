@@ -1658,6 +1658,7 @@ namespace System.Windows.Documents
         // arbitrary runs of document text to speller-suitable plain text
         // and keeps a table that allows it to efficiently map back from plain
         // text offsets (used by the engine) to ITextPointers.
+        [System.Diagnostics.DebuggerDisplay("{string.Join(string.Empty, Text).TrimEnd('\0')}")]
         private class TextMap
         {
             // Creates a new instance.

@@ -13,7 +13,7 @@ namespace System.Windows.Documents
 
     internal partial class WinRTSpellerInterop
     {
-        [DebuggerDisplay("SubSegments.Count = {SubSegments.Count} TextRange = {TextRange.Start},{TextRange.Length}")]
+        [DebuggerDisplay("{SourceString.Substring(TextRange.Start, TextRange.Length)}; SubSegments.Count = {SubSegments.Count}")]
         internal class SpellerSegment: ISpellerSegment
         {
             #region Constructor

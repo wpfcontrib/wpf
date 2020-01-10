@@ -14,6 +14,7 @@ namespace System.Windows.Documents
         /// Implementation of ISpellerSegment that manages the lifetime of 
         /// an ITextSegment (NLG COM interface) object
         /// </summary>
+        [System.Diagnostics.DebuggerDisplay("{SourceString.Substring(TextRange.Start, TextRange.Length)}")]
         private class SpellerSegment : ISpellerSegment, IDisposable
         {
             #region Constructor 
