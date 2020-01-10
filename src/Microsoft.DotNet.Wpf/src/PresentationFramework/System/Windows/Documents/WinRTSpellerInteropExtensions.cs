@@ -39,7 +39,8 @@ namespace System.Windows.Documents
                                 nextTokenStartPosition - predictedNextTokenStartPosition), 
                             spellChecker, 
                             owner); 
-                    if (!string.IsNullOrWhiteSpace(missingToken.Text))
+                    if (!string.IsNullOrWhiteSpace(missingToken.Text) && 
+                        allTokens.Count > 0)
                     {
                         allTokens[allTokens.Count - 1].RegisterAlternateForms(missingToken);
                     }
@@ -60,7 +61,8 @@ namespace System.Windows.Documents
                             text.Length - predictedNextTokenStartPosition),
                         spellChecker,
                         owner);
-                if (!string.IsNullOrWhiteSpace(missingToken.Text))
+                if (!string.IsNullOrWhiteSpace(missingToken.Text) && 
+                    allTokens.Count > 0)
                 {
                     allTokens[allTokens.Count - 1].RegisterAlternateForms(missingToken);
                 }
