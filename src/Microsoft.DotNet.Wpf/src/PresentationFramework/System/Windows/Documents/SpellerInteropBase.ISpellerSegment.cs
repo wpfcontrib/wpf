@@ -32,7 +32,7 @@ namespace System.Windows.Documents
             /// <summary>
             /// Text represented by <see cref="TextRange"/>
             /// </summary>
-            string Text => SourceString.Substring(TextRange.Start, TextRange.Length);
+            string Text { get; }
 
             /// <summary>
             /// Gets the alternate forms, if any, associated with the current word. 
