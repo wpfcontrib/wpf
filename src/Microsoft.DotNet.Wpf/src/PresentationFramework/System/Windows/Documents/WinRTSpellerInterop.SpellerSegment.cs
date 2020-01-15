@@ -13,7 +13,7 @@ namespace System.Windows.Documents
 
     internal partial class WinRTSpellerInterop
     {
-        [DebuggerDisplay("{SourceString.Substring(TextRange.Start, TextRange.Length)}; SubSegments.Count = {SubSegments.Count}")]
+        [System.Diagnostics.DebuggerDisplay("{DebuggerDisplay}")]
         internal class SpellerSegment: ISpellerSegment
         {
             #region Constructor
@@ -243,6 +243,28 @@ namespace System.Windows.Documents
             }
 
             #endregion SpellerInteropBase.ISpellerSegment
+
+            #region Private Properties
+
+            /// <summary>
+            /// Debugger Display String
+            /// </summary>
+            string DebuggerDisplay
+            {
+                get
+                {
+                    var debuggerDisplay = this.Text;
+                    var altStrings = string.Join(", ", AlternateForms ?? System.Linq.Enumerable.Empty<string>());
+                    if (!string.IsNullOrWhiteSpace(altStrings))
+                    {
+                        debuggerDisplay += $"({altStrings})";
+                    }
+
+                    return debuggerDisplay;
+                }
+            }
+
+            #endregion Private Properties
 
             #region Private Fields
 

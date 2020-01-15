@@ -14,7 +14,7 @@ namespace System.Windows.Documents
         /// Implementation of ISpellerSegment that manages the lifetime of 
         /// an ITextSegment (NLG COM interface) object
         /// </summary>
-        [System.Diagnostics.DebuggerDisplay("{SourceString.Substring(TextRange.Start, TextRange.Length)}")]
+        [System.Diagnostics.DebuggerDisplay("{DebuggerDisplay}")]
         private class SpellerSegment : ISpellerSegment, IDisposable
         {
             #region Constructor 
@@ -148,6 +148,9 @@ namespace System.Windows.Documents
             /// </remarks>
             public IReadOnlyList<string> AlternateForms => null;
 
+            /// <inheritdoc/>
+            public string Text => SourceString.Substring(TextRange.Start, TextRange.Length);
+
             /// <summary>
             /// Generates spelling suggestions for this segment
             /// If the segment has no suggestions (usually because it is not misspelled,
@@ -268,7 +271,30 @@ namespace System.Windows.Documents
                 }
             }
 
+
             #endregion Public Properties
+
+            #region Private Properties
+
+            /// <summary>
+            /// Debugger Display String
+            /// </summary>
+            private string DebuggerDisplay
+            {
+                get
+                {
+                    var debuggerDisplay = Text;
+                    var altStrings = string.Join(", ", AlternateForms ?? System.Linq.Enumerable.Empty<string>());
+                    if (!string.IsNullOrWhiteSpace(altStrings))
+                    {
+                        debuggerDisplay += $"({altStrings})";
+                    }
+
+                    return debuggerDisplay;
+                }
+            }
+
+            #endregion Private Properties
 
             #region Private Fields
 
