@@ -24,6 +24,7 @@
   </PropertyGroup>
   
   <Import Project="Microsoft.WinFX.targets" Condition="'$(_DisableMarkupCompilation)' != 'true'" />
+  <Import Project="Microsoft.WinFX.NoMarkupCompilation.targets" Condition="'$(_DisableMarkupCompilation)' == 'true'" />
 
   <ItemGroup Condition=" ('$(EnableDefaultItems)' == 'true') And ('$(UseWPF)' == 'true') And ('$(_TargetFrameworkVersionValue)' != '$(_UndefinedTargetFrameworkVersion)') And 
                          ('$(_TargetFrameworkVersionValue)' >= '$(_WindowsDesktopSdkTargetFrameworkVersionFloor)')">

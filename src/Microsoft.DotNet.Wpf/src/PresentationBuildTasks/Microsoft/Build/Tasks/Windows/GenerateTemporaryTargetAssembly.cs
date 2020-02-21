@@ -94,92 +94,31 @@ namespace Microsoft.Build.Tasks.Windows
             // Verification
             try
             {
-                XmlDocument xmlProjectDoc = null;
-
-                xmlProjectDoc = new XmlDocument( );
-                xmlProjectDoc.Load(CurrentProject);
-
-                //
-                // remove all the WinFX specific item lists
-                // ApplicationDefinition, Page, MarkupResource and Resource
-                //
-
-                RemoveItemsByName(xmlProjectDoc, APPDEFNAME);
-                RemoveItemsByName(xmlProjectDoc, PAGENAME);
-                RemoveItemsByName(xmlProjectDoc, MARKUPRESOURCENAME);
-                RemoveItemsByName(xmlProjectDoc, RESOURCENAME);
-
-                // Replace the Reference Item list with ReferencePath
-
-                RemoveItemsByName(xmlProjectDoc, REFERENCETYPENAME);
-                AddNewItems(xmlProjectDoc, ReferencePathTypeName, ReferencePath);
-
-                // Add GeneratedCodeFiles to Compile item list.
-                AddNewItems(xmlProjectDoc, CompileTypeName, GeneratedCodeFiles);
-
-                string currentProjectName = Path.GetFileNameWithoutExtension(CurrentProject);
-                string currentProjectExtension = Path.GetExtension(CurrentProject);
-
-                // Create a random file name
-                // This can fix the problem of project cache in VS.NET environment.
-                //
-                // GetRandomFileName( ) could return any possible file name and extension
-                // Since this temporary file will be used to represent an MSBUILD project file, 
-                // we will use the same extension as that of the current project file
-                //
-                string randomFileName = Path.GetFileNameWithoutExtension(Path.GetRandomFileName());
-
-                // Don't call Path.ChangeExtension to append currentProjectExtension. It will do 
-                // odd things with project names that already contains a period (like System.Windows.
-                // Contols.Ribbon.csproj). Instead, just append the extension - after all, we already know
-                // for a fact that this name (i.e., tempProj) lacks a file extension.
-                string tempProjPrefix = string.Join("_", currentProjectName, randomFileName, WPFTMP);
-                string tempProj = tempProjPrefix  + currentProjectExtension;
-
-
-                // Save the xmlDocument content into the temporary project file.
-                xmlProjectDoc.Save(tempProj);
-
                 //
                 // Invoke MSBUILD engine to build this temporary project file.
                 //
 
-                Hashtable globalProperties = new Hashtable(3);
+                Hashtable globalProperties = new Hashtable(5);
 
                 // Add AssemblyName, IntermediateOutputPath and _TargetAssemblyProjectName to the global property list
                 // Note that _TargetAssemblyProjectName is not defined as a property with Output attribute - that doesn't do us much 
                 // good here. We need _TargetAssemblyProjectName to be a well-known property in the new (temporary) project
                 // file, and having it be available in the current MSBUILD process is not useful.
                 globalProperties[intermediateOutputPathPropertyName] = IntermediateOutputPath;
-
                 globalProperties[assemblyNamePropertyName] = AssemblyName;
-                globalProperties[targetAssemblyProjectNamePropertyName] = currentProjectName;
+                globalProperties[targetAssemblyProjectNamePropertyName] = CurrentProject;
+                globalProperties["GeneratedCodeFiles"] = GeneratedCodeFiles;
+                globalProperties["_DisableMarkupCompilation"] = true;
 
-                retValue = BuildEngine.BuildProjectFile(tempProj, new string[] { CompileTargetName }, globalProperties, null);
-
-                // Delete the temporary project file and generated files unless diagnostic mode has been requested
-                if (!GenerateTemporaryTargetAssemblyDebuggingInformation)
-                {
-                    try
-                    {
-                        File.Delete(tempProj);
-
-                        DirectoryInfo intermediateOutputPath = new DirectoryInfo(IntermediateOutputPath);
-                        foreach (FileInfo temporaryProjectFile in intermediateOutputPath.EnumerateFiles(string.Concat(tempProjPrefix, "*")))
-                        {
-                            temporaryProjectFile.Delete();
-                        }
-                    }
-                    catch (IOException e)
-                    {
-                        // Failure to delete the file is a non fatal error
-                        Log.LogWarningFromException(e);
-                    }
-                }
+                retValue = BuildEngine.BuildProjectFile(CurrentProject, new string[] { CompileTargetName }, globalProperties, null);
             }
             catch (Exception e)
             {
                 Log.LogErrorFromException(e);
+                if (e.InnerException != null)
+                {
+                    Log.LogErrorFromException(e.InnerException);
+                }
                 retValue = false;
             }
 

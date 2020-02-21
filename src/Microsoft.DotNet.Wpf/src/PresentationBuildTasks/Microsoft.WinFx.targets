@@ -398,7 +398,15 @@
 
       <Message Text="MSBuildProjectFile is $(MSBuildProjectFile)" Condition="'$(MSBuildTargetsVerbose)' == 'true'" />
 
-       <GenerateTemporaryTargetAssembly
+     <PropertyGroup>
+       <_DisableMarkupCompilation>true</_DisableMarkupCompilation>
+       <GeneratedCodeFiles>@(_GeneratedCodeFiles)</GeneratedCodeFiles>
+     </PropertyGroup>
+     <CallTarget Targets="BuildOnlySettings;ResolveKeySource;CoreCompile" UseResultsCache="false"/>
+     <PropertyGroup>
+       <_DisableMarkupCompilation/>
+     </PropertyGroup>
+       <!--<GenerateTemporaryTargetAssembly
                 CurrentProject="$(MSBuildProjectFullPath)"
                 MSBuildBinPath="$(MSBuildBinPath)"
                 ReferencePathTypeName="ReferencePath"
@@ -411,7 +419,7 @@
                 GenerateTemporaryTargetAssemblyDebuggingInformation="$(GenerateTemporaryTargetAssemblyDebuggingInformation)"
                  >
 
-       </GenerateTemporaryTargetAssembly>
+       </GenerateTemporaryTargetAssembly>-->
 
        <CreateItem Include="$(IntermediateOutputPath)$(TargetFileName)" >
                <Output TaskParameter="Include" ItemName="AssemblyForLocalTypeReference" />

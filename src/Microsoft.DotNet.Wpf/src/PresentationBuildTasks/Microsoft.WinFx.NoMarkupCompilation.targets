@@ -1,0 +1,14 @@
+<Project>
+  <PropertyGroup>
+    <CompileDependsOn>
+      _IncludeGenerateCodeFilesInCompilation
+      $(CompileDependsOn)
+    </CompileDependsOn>
+  </PropertyGroup>
+
+  <Target Name="_IncludeGenerateCodeFilesInCompilation" Returns="@(Compile)">
+    <ItemGroup>
+      <Compile Include="$(GeneratedCodeFiles)" />
+    </ItemGroup>
+  </Target>
+</Project>
